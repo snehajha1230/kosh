@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #18181b;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
 }
 
 @theme inline {
@@ -12,15 +19,309 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* KOSH landing: mesh grid + drifting blobs + subtle shimmer */
+.kosh-grid-overlay {
+  background-image:
+    linear-gradient(to right, rgb(16 185 129 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(16 185 129 / 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 45%, black 20%, transparent 70%);
+}
+
+.dark .kosh-grid-overlay {
+  background-image:
+    linear-gradient(to right, rgb(52 211 153 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(52 211 153 / 0.07) 1px, transparent 1px);
+}
+
+@keyframes kosh-blob-drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(8%, -6%) scale(1.06);
+  }
+}
+
+@keyframes kosh-blob-drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-10%, 8%) scale(1.05);
+  }
+}
+
+@keyframes kosh-blob-drift-c {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(calc(-50% + 5%), calc(-50% - 4%)) scale(1.08);
+  }
+}
+
+@keyframes kosh-shimmer {
+  0% {
+    opacity: 0.15;
+    background-position: 0% 50%;
+  }
+  50% {
+    opacity: 0.28;
+    background-position: 100% 50%;
+  }
+  100% {
+    opacity: 0.15;
+    background-position: 0% 50%;
+  }
+}
+
+.kosh-blob {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.kosh-blob-a {
+  animation-name: kosh-blob-drift-a;
+  animation-duration: 22s;
+}
+
+.kosh-blob-b {
+  animation-name: kosh-blob-drift-b;
+  animation-duration: 26s;
+  animation-delay: -8s;
+}
+
+.kosh-blob-c {
+  animation-name: kosh-blob-drift-c;
+  animation-duration: 19s;
+  animation-delay: -4s;
+}
+
+.kosh-shimmer {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.04) 40%,
+    rgb(16 185 129 / 0.06) 50%,
+    rgb(255 255 255 / 0.04) 60%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  animation: kosh-shimmer 14s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.dark .kosh-shimmer {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.03) 40%,
+    rgb(52 211 153 / 0.05) 50%,
+    rgb(255 255 255 / 0.03) 60%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kosh-blob,
+  .kosh-shimmer {
+    animation: none;
+  }
+}
+
+/* Landing: gentle entrance (respects reduced motion) */
+@keyframes kosh-landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kosh-landing-hero-text {
+  animation: kosh-landing-fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
+}
+
+.kosh-landing-preview-wrap {
+  animation: kosh-landing-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+  opacity: 0;
+}
+
+.kosh-landing-preview .kosh-landing-bar {
+  transform-origin: bottom;
+  animation: kosh-landing-bar-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.kosh-landing-preview .kosh-landing-bar:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.kosh-landing-preview .kosh-landing-bar:nth-child(2) {
+  animation-delay: 0.24s;
+}
+.kosh-landing-preview .kosh-landing-bar:nth-child(3) {
+  animation-delay: 0.28s;
+}
+.kosh-landing-preview .kosh-landing-bar:nth-child(4) {
+  animation-delay: 0.32s;
+}
+.kosh-landing-preview .kosh-landing-bar:nth-child(5) {
+  animation-delay: 0.36s;
+}
+.kosh-landing-preview .kosh-landing-bar:nth-child(6) {
+  animation-delay: 0.4s;
+}
+.kosh-landing-preview .kosh-landing-bar:nth-child(7) {
+  animation-delay: 0.44s;
+}
+
+@keyframes kosh-landing-bar-in {
+  from {
+    transform: scaleY(0.35);
+    opacity: 0.6;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kosh-landing-hero-text,
+  .kosh-landing-preview-wrap {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .kosh-landing-preview .kosh-landing-bar {
+    animation: none;
+    transform: none;
+    opacity: 0.9;
+  }
+}
+
+@keyframes summary-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.summary-panel-animate {
+  animation: summary-panel-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .summary-panel-animate {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+/* Fintech-style landing: mesh, animated frame, soft float */
+@keyframes kosh-fintech-gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes kosh-fintech-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes kosh-fintech-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.kosh-fintech-mesh {
+  background:
+    radial-gradient(ellipse 100% 80% at 50% -30%, rgb(16 185 129 / 0.22), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 100% 10%, rgb(6 182 212 / 0.12), transparent 50%),
+    radial-gradient(ellipse 60% 50% at 0% 80%, rgb(52 211 153 / 0.1), transparent 45%),
+    radial-gradient(ellipse 50% 40% at 80% 90%, rgb(20 184 166 / 0.08), transparent 50%);
+}
+
+.kosh-fintech-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 40%, black 15%, transparent 72%);
+}
+
+.kosh-fintech-border-frame {
+  background: linear-gradient(
+    125deg,
+    rgb(52 211 153),
+    rgb(20 184 166),
+    rgb(6 182 212),
+    rgb(45 212 191),
+    rgb(52 211 153)
+  );
+  background-size: 280% 280%;
+  animation: kosh-fintech-gradient-shift 10s ease-in-out infinite;
+}
+
+.kosh-fintech-preview-glow {
+  animation: kosh-fintech-glow-pulse 5s ease-in-out infinite;
+}
+
+.kosh-fintech-card-back {
+  animation: kosh-fintech-float 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kosh-fintech-border-frame {
+    animation: none;
+    background-position: 40% 50%;
+  }
+
+  .kosh-fintech-preview-glow,
+  .kosh-fintech-card-back {
+    animation: none;
+  }
+
+  .kosh-fintech-card-back {
+    transform: rotate(-1deg);
+  }
 }

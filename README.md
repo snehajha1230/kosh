@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kosh
 
-## Getting Started
+**Kosh** is a personal finance demo built with Next.js. It lets you explore income, expenses, net balance, and category breakdowns with a small dashboard of charts and filters. All data lives in the browser—there is no backend.
 
-First, run the development server:
+## Features
+
+- **Landing page** — Marketing-style entry with navigation into the app.
+- **Dashboard** (`/dashboard`) — Overview, income, expenses, and insights tabs with summary cards.
+- **Transactions** — Sortable, filterable list; **Admin** role can add, edit, and delete entries (Viewer is read-only).
+- **Charts & visuals** — Balance-over-time chart (range presets, hover details), expense pie chart, income semi-gauges, and insight cards driven by your data.
+- **Theme** — Light / dark mode, persisted with your session data.
+- **Persistence** — Transactions, role, and theme are saved in **localStorage** (demo reset available when signed in as Admin).
+
+## Tech stack
+
+| Layer | Choice |
+|--------|--------|
+| Framework | [Next.js](https://nextjs.org/) 16 (App Router) |
+| UI | [React](https://react.dev/) 19 |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) 4 |
+| Language | TypeScript |
+
+## Getting started
+
+**Requirements:** Node.js 20+ recommended (aligned with `@types/node` in the repo).
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) for the landing page. The dashboard lives at [http://localhost:3000/dashboard](http://localhost:3000/dashboard).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Development server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run start` | Run the production server (after `build`) |
+| `npm run lint` | ESLint |
 
-## Learn More
+## Project layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/                    # Routes, layout, global styles, providers
+components/
+  dashboard/            # Dashboard shell, charts, transactions UI
+  finance/              # React context for finance state
+  landing/              # Landing page
+lib/
+  aggregates.ts         # Sums, daily series, monthly rollups
+  finance-insights.ts   # Insight card copy from data
+  mock-data.ts          # Seed transactions for first load
+  storage.ts            # localStorage load/save
+  types.ts              # Shared TypeScript types
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Data & privacy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Seed data is defined in `lib/mock-data.ts` as `INITIAL_TRANSACTIONS`.
+- Hydrated state uses the key `zorvyn-finance-state-v2` in `localStorage` (see `lib/storage.ts`).
+- Clearing site data or using **Reset demo data** (Admin, dashboard footer) restores the original demo set.
 
-## Deploy on Vercel
+## Roles
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Viewer** — Browse dashboards and transactions; cannot mutate data.
+- **Admin** — Full CRUD on transactions plus demo reset.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The role is stored locally with the rest of the app state.
+
+## License
+
+Private project (`"private": true` in `package.json`). Adjust this section if you publish or open-source the repo.
