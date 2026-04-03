@@ -16,11 +16,10 @@ export function filterAndSortTransactions(
   });
 
   list = [...list].sort((a, b) => {
-    const dir = filters.sortDir === "asc" ? 1 : -1;
     if (filters.sortBy === "amount") {
-      return (a.amount - b.amount) * dir;
+      return b.amount - a.amount;
     }
-    return a.date.localeCompare(b.date) * dir;
+    return b.date.localeCompare(a.date);
   });
 
   return list;

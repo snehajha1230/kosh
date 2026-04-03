@@ -51,7 +51,6 @@ const defaultFilters: FinanceFilters = {
   category: "all",
   type: "all",
   sortBy: "date",
-  sortDir: "desc",
 };
 
 function reducer(state: State, action: Action): State {

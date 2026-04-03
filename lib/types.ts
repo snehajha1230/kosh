@@ -3,7 +3,6 @@ export type UserRole = "viewer" | "admin";
 export type TransactionType = "income" | "expense";
 
 export type SortKey = "date" | "amount";
-export type SortDir = "asc" | "desc";
 
 export type Transaction = {
   id: string;
@@ -19,7 +18,6 @@ export type FinanceFilters = {
   category: string;
   type: "all" | TransactionType;
   sortBy: SortKey;
-  sortDir: SortDir;
 };
 
 export const EXPENSE_CATEGORIES = [
