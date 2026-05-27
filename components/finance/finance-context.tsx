@@ -20,7 +20,7 @@ import {
 import { filterAndSortTransactions, uniqueCategories } from "@/lib/selectors";
 import {
   defaultTransactions,
-  loadPersistedState,
+  loadPersistedState, 
   savePersistedState,
   type PersistedFinanceState,
 } from "@/lib/storage";
